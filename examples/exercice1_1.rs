@@ -13,8 +13,11 @@ fn reverse(content: &str) {
 }
 
 fn reverse_bulk_50(content: &str) {
-    const BULK_SIZE : usize = 50;
-    println!("Reverse the file content {} lines at a time by storing it in a LIFO (VecDeque): ", BULK_SIZE);
+    const BULK_SIZE: usize = 50;
+    println!(
+        "Reverse the file content {} lines at a time by storing it in a LIFO (VecDeque): ",
+        BULK_SIZE
+    );
     let mut buffer = VecDeque::with_capacity(50);
     let lines = &mut content.lines();
 
@@ -37,7 +40,7 @@ fn run() -> Result<(), Box<dyn Error>> {
         return Err("".into());
     }
 
-    let file = args().skip(1).next().expect("filename");
+    let file = args().nth(1).expect("filename");
     let file_content = read_to_string(&file)?;
 
     reverse(&file_content);
@@ -47,7 +50,7 @@ fn run() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    if let Err(_) = run() {
+    if run().is_err() {
         exit(1);
     }
 }
