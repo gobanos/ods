@@ -261,5 +261,5 @@ fn main() {
 }
 
 fn print_help() {
-    println!("USAGE: exercice1_1 [FILENAME]");
+    println!("USAGE: exercise1_1 [FILENAME]");
 }
