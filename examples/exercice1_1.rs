@@ -1,13 +1,12 @@
 //! # Exercise 1.1.
 //! This exercise is designed to help familiarize the reader with
 //! choosing the right data structure for the right problem. If implemented,
-//! the parts of this exercise should be done by making use of an implemen-
-//! tation of the relevant interface (Stack, Queue, Deque, USet, or SSet) pro-
-//! vided by the .
+//! the parts of this exercise should be done by making use of an implementation
+//! of the relevant interface (Stack, Queue, Deque, USet, or SSet) provided by the language.
 //! Solve the following problems by reading a text file one line at a time
-//! and performing operations on each line in the appropriate data struc-
-//! ture(s). Your implementations should be fast enough that even files con-
-//! taining a million lines can be processed in a few seconds.
+//! and performing operations on each line in the appropriate data structure(s).
+//! Your implementations should be fast enough that even files containing
+//! a million lines can be processed in a few seconds.
 
 use rand::prelude::SliceRandom;
 use rand::thread_rng;
