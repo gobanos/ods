@@ -1,5 +1,5 @@
 # Open Data Structures
-[Current page](https://opendatastructures.org/)
+Page 27 [[DOC](./ods-python.pdf)]
 
 ## Links
  - [Website](https://opendatastructures.org/)
