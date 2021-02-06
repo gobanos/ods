@@ -233,9 +233,7 @@ fn display(index: usize, line: &str) {
 
 fn run() -> Result<(), Box<dyn Error>> {
     if args().len() != 2 {
-        eprintln!("Invalid number of arguments");
-        print_help();
-        return Err("".into());
+        return Err("Invalid number of arguments".into());
     }
 
     let file = args().nth(1).expect("filename");
@@ -255,7 +253,9 @@ fn run() -> Result<(), Box<dyn Error>> {
 }
 
 fn main() {
-    if run().is_err() {
+    if let Err(err) = run() {
+        eprintln!("{}", err);
+        print_help();
         exit(1);
     }
 }
