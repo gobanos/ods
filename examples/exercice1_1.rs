@@ -1,9 +1,11 @@
-use std::collections::{HashSet, VecDeque, BTreeSet, BTreeMap};
+use rand::prelude::SliceRandom;
+use rand::thread_rng;
+use std::collections::{BTreeMap, BTreeSet, HashSet, VecDeque};
 use std::env::args;
 use std::error::Error;
 use std::fs::read_to_string;
-use std::process::exit;
 use std::iter::repeat;
+use std::process::exit;
 
 fn reverse(content: &str) {
     println!("Reverse the file content by storing it in a LIFO (VecDeque): ");
@@ -87,7 +89,7 @@ fn duplicates(content: &str) {
 
 fn sort_by_length_uniques(content: &str) {
     println!("Sort lines by length then alphabetical order, remove duplicated using a BinaryTree (BTreeSet)");
-    let lines : BTreeSet<(usize, &str)> = content.lines().map(|line| (line.len(), line)).collect();
+    let lines: BTreeSet<(usize, &str)> = content.lines().map(|line| (line.len(), line)).collect();
     for (i, (_, line)) in lines.into_iter().enumerate() {
         display(i, line);
     }
@@ -99,7 +101,32 @@ fn sort_by_length_all(content: &str) {
     for line in content.lines() {
         *lines.entry((line.len(), line)).or_default() += 1;
     }
-    for (i, line) in lines.into_iter().flat_map(|((_, line), count)| repeat(line).take(count)).enumerate() {
+    for (i, line) in lines
+        .into_iter()
+        .flat_map(|((_, line), count)| repeat(line).take(count))
+        .enumerate()
+    {
+        display(i, line);
+    }
+}
+
+fn even_then_odd(content: &str) {
+    println!("Display the even numbered lines then the odd numbered ones using a Vec");
+    let lines: Vec<&str> = content.lines().collect();
+    for (i, line) in lines.iter().step_by(2).enumerate() {
+        display(i, line);
+    }
+    for (i, line) in lines.iter().skip(1).step_by(2).enumerate() {
+        display(i + (lines.len() + 1) / 2, line);
+    }
+}
+
+fn random_sort(content: &str) {
+    println!("Display the lines in a random order using a Vec");
+    let mut lines: Vec<&str> = content.lines().collect();
+    let mut rng = thread_rng();
+    lines.shuffle(&mut rng);
+    for (i, line) in lines.into_iter().enumerate() {
         display(i, line);
     }
 }
@@ -125,6 +152,8 @@ fn run() -> Result<(), Box<dyn Error>> {
     duplicates(&file_content);
     sort_by_length_uniques(&file_content);
     sort_by_length_all(&file_content);
+    even_then_odd(&file_content);
+    random_sort(&file_content);
 
     Ok(())
 }
