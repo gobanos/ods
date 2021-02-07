@@ -126,6 +126,7 @@ mod tests {
         assert_eq!(arr.get(0), Some(&"foo"));
         assert_eq!(arr.get(1), Some(&"bar"));
         assert_eq!(arr.get(2), Some(&"foobar"));
+        assert_eq!(arr.get(3), None);
     }
 
     #[test]
@@ -137,9 +138,11 @@ mod tests {
         *arr.get_mut(0).unwrap() = "my_foo";
         *arr.get_mut(1).unwrap() = "my_bar";
         *arr.get_mut(2).unwrap() = "my_foobar";
+        assert_eq!(arr.get_mut(3), None);
         assert_eq!(arr.get(0), Some(&"my_foo"));
         assert_eq!(arr.get(1), Some(&"my_bar"));
         assert_eq!(arr.get(2), Some(&"my_foobar"));
+        assert_eq!(arr.get(3), None);
     }
 
     #[test]
@@ -151,6 +154,7 @@ mod tests {
         assert_eq!(arr.get(0), Some(&"foobar"));
         assert_eq!(arr.get(1), Some(&"bar"));
         assert_eq!(arr.get(2), Some(&"foo"));
+        assert_eq!(arr.get(3), None);
     }
 
     #[test]
@@ -162,6 +166,7 @@ mod tests {
         assert_eq!(arr.remove(0), "foobar");
         assert_eq!(arr.remove(0), "bar");
         assert_eq!(arr.remove(0), "foo");
+        assert_eq!(arr.get(0), None);
     }
 
     #[test]
