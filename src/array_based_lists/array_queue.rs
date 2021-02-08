@@ -2,9 +2,9 @@
 //!
 //! See Chapter 2.3
 
+use crate::queue::Queue;
 use std::mem::MaybeUninit;
 use std::ptr;
-use crate::queue::Queue;
 
 /// ArrayQueue: An Array-Based Queue
 pub struct ArrayQueue<T> {
@@ -28,7 +28,10 @@ impl<T> ArrayQueue<T> {
             self.resize();
         }
         unsafe {
-            *self.buf.get_unchecked_mut((len + self.offset) % self.buf.len()) = MaybeUninit::new(element);
+            *self
+                .buf
+                .get_unchecked_mut((len + self.offset) % self.buf.len()) =
+                MaybeUninit::new(element);
         }
         self.len += 1;
     }
