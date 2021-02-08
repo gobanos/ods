@@ -2,6 +2,7 @@
 //!
 //! See Chapter 2.1
 
+use crate::stack::Stack;
 use std::mem::MaybeUninit;
 use std::ptr;
 
@@ -121,6 +122,23 @@ impl<T> Drop for ArrayStack<T> {
         for index in (0..self.len).rev() {
             // TODO: Prevent reallocation on drop.
             self.remove(index);
+        }
+    }
+}
+
+impl<T> Stack for ArrayStack<T> {
+    type Item = T;
+
+    fn push(&mut self, item: T) {
+        self.add(self.len, item);
+    }
+
+    fn pop(&mut self) -> Option<T> {
+        let len = self.len;
+        if len > 0 {
+            Some(self.remove(len - 1))
+        } else {
+            None
         }
     }
 }
