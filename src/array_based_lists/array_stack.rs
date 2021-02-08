@@ -5,12 +5,14 @@
 use std::mem::MaybeUninit;
 use std::ptr;
 
+/// ArrayStack: Fast Stack Operations Using an Array
 pub struct ArrayStack<T> {
     buf: Box<[MaybeUninit<T>]>,
     len: usize,
 }
 
 impl<T> ArrayStack<T> {
+    /// Create a new ArrayStack
     pub fn new() -> Self {
         Self {
             buf: [].into(),
@@ -18,23 +20,29 @@ impl<T> ArrayStack<T> {
         }
     }
 
-    pub fn get(&self, i: usize) -> Option<&T> {
-        if i < self.len {
-            Some(unsafe { &*self.buf[i].as_ptr() })
+    /// Get a reference to element at given index
+    pub fn get(&self, index: usize) -> Option<&T> {
+        if index < self.len {
+            Some(unsafe { &*self.buf[index].as_ptr() })
         } else {
             None
         }
     }
 
-    pub fn get_mut(&mut self, i: usize) -> Option<&mut T> {
-        if i < self.len {
-            Some(unsafe { &mut *self.buf[i].as_mut_ptr() })
+    /// Get a mutable reference to element at given index
+    pub fn get_mut(&mut self, index: usize) -> Option<&mut T> {
+        if index < self.len {
+            Some(unsafe { &mut *self.buf[index].as_mut_ptr() })
         } else {
             None
         }
     }
 
-    pub fn add(&mut self, index: usize, x: T) {
+    /// Insert given element at given index, shifting all following elements to the right
+    ///
+    /// # Panics
+    /// Panics if `index` > `len`
+    pub fn add(&mut self, index: usize, element: T) {
         #[cold]
         #[inline(never)]
         fn assert_failed(index: usize, len: usize) -> ! {
@@ -55,11 +63,15 @@ impl<T> ArrayStack<T> {
         unsafe {
             let p = self.buf.as_mut_ptr().add(index);
             ptr::copy(p, p.offset(1), len - index);
-            p.write(MaybeUninit::new(x));
+            p.write(MaybeUninit::new(element));
         }
         self.len += 1;
     }
 
+    /// Remove at returns element at given index, shifting all following elements to the left
+    ///
+    /// # Panics
+    /// Panics if `index` >= `len`
     pub fn remove(&mut self, index: usize) -> T {
         #[cold]
         #[inline(never)]
@@ -70,17 +82,17 @@ impl<T> ArrayStack<T> {
         if index >= len {
             assert_failed(index, len);
         }
-        let x;
+        let element;
         unsafe {
             let p = self.buf.as_mut_ptr().add(index);
-            x = p.read().assume_init();
+            element = p.read().assume_init();
             ptr::copy(p.offset(1), p, len - index - 1);
         }
         self.len -= 1;
         if self.buf.len() >= 3 * self.len {
             self.resize();
         }
-        x
+        element
     }
 
     fn resize(&mut self) {
