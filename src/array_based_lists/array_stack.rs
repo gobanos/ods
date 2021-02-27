@@ -21,6 +21,16 @@ impl<T> ArrayStack<T> {
         }
     }
 
+    /// The array stack length
+    pub fn len(&self) -> usize {
+        self.len
+    }
+
+    /// Is the array stack empty ?
+    pub fn is_empty(&self) -> bool {
+        self.len == 0
+    }
+
     /// Get a reference to element at given index
     pub fn get(&self, index: usize) -> Option<&T> {
         if index < self.len {
